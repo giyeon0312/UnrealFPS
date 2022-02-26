@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
+#include "QuestContentWidget.h"
 #include "QuestWidget.h"
 //#include "QuestCategoryData.h"
 #include "QuestCategoryWidget.h"
 #include "../FPSGameInstance.h"
-#include "QuestContentWidget.h"
 
 void UQuestContentWidget::NativeConstruct()
 {
