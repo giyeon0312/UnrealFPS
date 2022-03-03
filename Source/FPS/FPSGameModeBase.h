@@ -29,5 +29,6 @@ public:
 	}
 
 protected:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage);
 	virtual void BeginPlay() override;
 };

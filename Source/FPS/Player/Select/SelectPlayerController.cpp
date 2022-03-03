@@ -6,7 +6,6 @@
 #include "../../CharacterSelectGameMode.h"
 #include "../../UI/CharacterSelectWidget.h"
 #include "../../FPSGameInstance.h"
-//#include "../../Media/MediaPlayerActor.h"
 
 
 ASelectPlayerController::ASelectPlayerController()
@@ -52,83 +51,71 @@ void ASelectPlayerController::SetupInputComponent()
 
 void ASelectPlayerController::Picking()
 {
-	//FHitResult	result;
+	FHitResult	result;
 
-	//bool Collision = GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel7,
-	//	false, result);
+	bool Collision = GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel8, false, result);
 
-	//if (Collision)
-	//{
-	//	ASelectCharacter* SelectPlayer = Cast<ASelectCharacter>(result.GetActor());
+	if (Collision)
+	{
+		ASelectCharacter* SelectPlayer = Cast<ASelectCharacter>(result.GetActor());
 
-	//	if (SelectPlayer)
-	//	{
-	//		if (SelectPlayer != m_SelectCharacter)
-	//		{
-	//			m_SelectCharacter = SelectPlayer;
-
-	//			m_SelectCharacter->EnableOutLine(true);
-	//		}
-	//	}
-
-	//	else
-	//	{
-	//		if (m_SelectCharacter)
-	//		{
-	//			m_SelectCharacter->EnableOutLine(false);
-
-	//			m_SelectCharacter = nullptr;
-	//		}
-	//	}
-	//}
-
-	//else
-	//{
-	//	if (m_SelectCharacter)
-	//	{
-	//		m_SelectCharacter->EnableOutLine(false);
-
-	//		m_SelectCharacter = nullptr;
-	//	}
-	//}
+		if (SelectPlayer)
+		{
+			if (SelectPlayer != m_SelectCharacter)
+			{
+				m_SelectCharacter = SelectPlayer;
+				m_SelectCharacter->EnableOutLine(true);
+			}
+		}
+		else
+		{
+			if (m_SelectCharacter)
+			{
+				m_SelectCharacter->EnableOutLine(false);
+				m_SelectCharacter = nullptr;
+			}
+		}
+	}
+	else
+	{
+		if (m_SelectCharacter)
+		{
+			m_SelectCharacter->EnableOutLine(false);
+			m_SelectCharacter = nullptr;
+		}
+	}
 }
 
 void ASelectPlayerController::MouseLClick()
 {
-	//ACharacterSelectGameMode* GameMode =
-	//	Cast<ACharacterSelectGameMode>(GetWorld()->GetAuthGameMode());
+	ACharacterSelectGameMode* GameMode = Cast<ACharacterSelectGameMode>(GetWorld()->GetAuthGameMode());
 
-	//UCharacterSelectWidget* SelectWidget = nullptr;
+	UCharacterSelectWidget* SelectWidget = nullptr;
 
-	//if (GameMode)
-	//	SelectWidget = GameMode->GetCharacterSelectWidget();
+	if (GameMode)
+		SelectWidget = GameMode->GetCharacterSelectWidget();
 
-	//if (m_SelectCharacter)
-	//{
-	//	UFPSInstance* GameInst = Cast<UFPSGameInstance>(GetWorld()->GetGameInstance());
+	// 현재 선택된 캐릭터가 있으면 UI와 연동
+	if (m_SelectCharacter)
+	{
+		UFPSGameInstance* GameInst = Cast<UFPSGameInstance>(GetWorld()->GetGameInstance());
 
-	//	if (GameInst)
-	//		GameInst->SetSelectJob(m_SelectCharacter->GetJob());
+		if (GameInst)
+			GameInst->SetSelectJob(m_SelectCharacter->GetJob());
 
-	//	if (SelectWidget)
-	//	{
-	//		SelectWidget->StartEnable(true);
-	//		SelectWidget->SetInputNameVisible(true);
-	//	}
+		if (SelectWidget)
+		{
+			SelectWidget->StartEnable(true);
+		}
+	}
 
-	//	//// Media 재생
-	//	//if (m_MediaActor)
-	//	//	m_MediaActor->PlayMedia();
-	//}
-
-	//else
-	//{
-	//	if (SelectWidget)
-	//	{
-	//		SelectWidget->StartEnable(false);
-	//		SelectWidget->SetInputNameVisible(false);
-	//	}
-	//}
+	else
+	{
+		if (SelectWidget)
+		{
+			SelectWidget->StartEnable(false);
+		}
+	}
 }
 
 void ASelectPlayerController::MouseLUp()

@@ -27,8 +27,27 @@ private:
 	UPROPERTY()
 	UDataTable* m_QuestInfoTable;
 
+	EPlayerJob	m_SelectJob;
+	FString		m_SelectName;
+
 public:
 	UFPSGameInstance();
+
+public:
+	void SetSelectJob(EPlayerJob Job)
+	{
+		m_SelectJob = Job;
+	}
+
+	EPlayerJob GetSelectJob()	const
+	{
+		return m_SelectJob;
+	}
+
+	void SetSelectName(const FString& Name)
+	{
+		m_SelectName = Name;
+	}
 
 public:
 	const FMonsterTableInfo* FindMonsterInfo(const FString& Name);

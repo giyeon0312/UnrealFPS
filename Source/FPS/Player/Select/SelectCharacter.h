@@ -14,6 +14,12 @@ class FPS_API ASelectCharacter : public ACharacter
 public:
 	ASelectCharacter();
 
+public:
+	EPlayerJob GetJob()	const
+	{
+		return m_Job;
+	}
+
 protected:
 	EPlayerJob	m_Job;
 	class USelectAnimInstance* m_AnimInstance;

@@ -19,7 +19,6 @@ public:
 
 private:
 	class ASelectCharacter* m_SelectCharacter;
-	//class AMediaPlayerActor* m_MediaActor;
 
 protected:
 	virtual void BeginPlay() override;
@@ -30,9 +29,10 @@ public:
 
 protected:
 	void Picking();
-	UFUNCTION()
-		void MouseLClick();
 
 	UFUNCTION()
-		void MouseLUp();
+	void MouseLClick();
+
+	UFUNCTION()
+	void MouseLUp();
 };

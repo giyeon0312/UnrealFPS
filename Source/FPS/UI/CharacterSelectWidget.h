@@ -16,42 +16,24 @@ class FPS_API UCharacterSelectWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-//protected:
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-//	UButton* m_StartButton;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-//	UButton* m_BackButton;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-//	UInputNameWidget* m_InputName;
-//
-//public:
-//	FString GetNameText()
-//	{
-//		return m_InputName->GetNameText();
-//	}
-//
-//	void SetInputNameVisible(bool Visible)
-//	{
-//		if (Visible)
-//			m_InputName->SetVisibility(ESlateVisibility::Visible);
-//
-//		else
-//			m_InputName->SetVisibility(ESlateVisibility::Collapsed);
-//	}
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UButton* m_StartButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UButton* m_BackButton;
 
 public:
 	virtual void NativeConstruct();
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
-//public:
-//	void StartEnable(bool Enable);
-//
-//public:
-//	UFUNCTION()
-//	void StartClick();
-//
-//	UFUNCTION()
-//	void BackClick();
+public:
+	void StartEnable(bool Enable);
+
+public:
+	UFUNCTION()
+	void StartClick();
+
+	UFUNCTION()
+	void BackClick();
 };
