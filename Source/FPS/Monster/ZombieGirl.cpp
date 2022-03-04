@@ -20,6 +20,7 @@ AZombieGirl::AZombieGirl()
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	//GetMesh()->SetRelativeScale3D(FVector(0.95f, 0.95f, 0.95f));
 
+	m_SimpleStateWidget->SetRelativeLocation(FVector(0.f, 0.f, 230.f));
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>	AnimAsset(TEXT("AnimBlueprint'/Game/Monster/BPZombieGirlAnim.BPZombieGirlAnim_C'"));
 

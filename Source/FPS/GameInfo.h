@@ -9,6 +9,7 @@
 #include "Blueprint/IUserObjectListEntry.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/WidgetComponent.h"
 #include "UObject/NoExportTypes.h"
 #include "GameInfo.generated.h"
 

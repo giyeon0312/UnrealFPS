@@ -9,6 +9,7 @@
 #include "../UI/MainWidget.h"
 #include "../UI/CharacterStateHUD.h"
 #include "../UI/InventoryWidget.h"
+#include "../UI/CharacterSimpleStateWidget.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -21,11 +22,24 @@ APlayerCharacter::APlayerCharacter()
 
 	m_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	m_Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Arm"));
+	m_SimpleStateWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("SimpleState"));
 
 	// (씬컴포넌트 이므로)부모컴포넌트를 지정한다.
 	m_Arm->SetupAttachment(GetCapsuleComponent());
 	m_Camera->SetupAttachment(m_Arm);
 
+	// 캐릭터 위 상태 바 
+	m_SimpleStateWidget->SetupAttachment(GetMesh());
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>	SimpleCharacterState(TEXT("WidgetBlueprint'/Game/UI/UI_CharacterSimpleState.UI_CharacterSimpleState_C'"));
+
+	if (SimpleCharacterState.Succeeded())
+		m_SimpleStateWidget->SetWidgetClass(SimpleCharacterState.Class);
+
+	m_SimpleStateWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	m_SimpleStateWidget->SetDrawSize(FVector2D(200.f, 60.f)); 
+
+	// 카메라 조정
 	m_Arm->TargetArmLength = 300;
 	m_Arm->TargetOffset = FVector(0.f, 0.f, 100.f);
 	m_Arm->SetRelativeRotation(FRotator(-10.f, 0.f, 0.f)); //피치회전
@@ -99,9 +113,6 @@ void APlayerCharacter::BeginPlay()
 
 			//GetCharacterMovement()->MaxWalkSpeed = m_Info.MoveSpeed;
 		}
-
-		//else
-		//	m_Info.Attack = 30.f;
 	}
 
 	AFPSGameModeBase* GameMode = Cast<AFPSGameModeBase>(GetWorld()->GetAuthGameMode());
@@ -109,9 +120,17 @@ void APlayerCharacter::BeginPlay()
 	{
 		GameMode->GetMainWidget()->GetCharacterStateHUD()->SetNameText(m_Info.Name);
 		GameMode->GetMainWidget()->GetInventory()->SetGold(m_Info.Gold);
-		
-
 	}
+	
+	m_CharacterSimpleStateWidget = Cast<UCharacterSimpleStateWidget>(m_SimpleStateWidget->GetWidget());
+
+	if (m_CharacterSimpleStateWidget)
+		m_CharacterSimpleStateWidget->SetNameSetDelegate<APlayerCharacter>(this, &APlayerCharacter::SetPlayerNameWidget);
+}
+
+void APlayerCharacter::SetPlayerNameWidget()
+{
+	m_CharacterSimpleStateWidget->SetCharacterName(m_Info.Name);
 }
 
 // Called every frame
@@ -147,6 +166,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 	if (GameMode)
 	{
 		GameMode->GetMainWidget()->GetCharacterStateHUD()->SetHPPercent((float)m_Info.HP / m_Info.HPMax);
+		m_CharacterSimpleStateWidget->SetHPPercent((float)m_Info.HP / m_Info.HPMax);
 	}
 
 	return Dmg;

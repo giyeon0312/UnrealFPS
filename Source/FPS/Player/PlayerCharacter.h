@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../GameInfo.h"
+#include "Components/SceneCaptureComponent2D.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
@@ -19,12 +20,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SetPlayerNameWidget();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	UCameraComponent* m_Camera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	USpringArmComponent* m_Arm;
+
+	// 캐릭터 위의 상태바
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UWidgetComponent* m_SimpleStateWidget;
+
+	class UCharacterSimpleStateWidget* m_CharacterSimpleStateWidget;
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	USceneCaptureComponent2D* m_FaceCapture;*/
+
 
 	// 몽타주를 배열로 가져온다.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))

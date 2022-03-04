@@ -32,6 +32,15 @@ protected:
 
 	bool						m_AttackEnd;
 
+protected:
+	// 몬스터 위 상태바
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UWidgetComponent* m_SimpleStateWidget;
+
+	class UCharacterSimpleStateWidget* m_CharacterSimpleStateWidget;
+
+	void SetPlayerNameWidget();
+
 public:
 	bool IsAttackEnd() const
 	{

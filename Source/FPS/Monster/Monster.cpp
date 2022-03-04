@@ -4,7 +4,9 @@
 #include "Monster.h"
 #include "MonsterAnimInstance.h"
 #include "MonsterSpawnPoint.h"
+#include "NormalMonsterAIController.h"
 #include "../FPSGameInstance.h"
+#include "../UI/CharacterSimpleStateWidget.h"
 
 // Sets default values
 AMonster::AMonster()
@@ -14,6 +16,19 @@ AMonster::AMonster()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Monster"));
 	GetCapsuleComponent()->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No; //플레이어가 밟고 올라설 수 없도록
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 몬스터 위 상태 바
+	m_SimpleStateWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("SimpleState"));
+	m_SimpleStateWidget->SetupAttachment(GetMesh());
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>	SimpleCharacterState(TEXT("WidgetBlueprint'/Game/UI/UI_CharacterSimpleState.UI_CharacterSimpleState_C'"));
+
+	if (SimpleCharacterState.Succeeded())
+		m_SimpleStateWidget->SetWidgetClass(SimpleCharacterState.Class);
+
+	m_SimpleStateWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	m_SimpleStateWidget->SetDrawSize(FVector2D(200.f, 60.f));
+
 
 	m_MonsterAnim = nullptr;
 	m_SpawnPoint = nullptr;
@@ -69,6 +84,16 @@ void AMonster::BeginPlay()
 			GetCharacterMovement()->MaxWalkSpeed = m_Info.MoveSpeed;
 		}
 	}
+
+	m_CharacterSimpleStateWidget = Cast<UCharacterSimpleStateWidget>(m_SimpleStateWidget->GetWidget());
+
+	if (m_CharacterSimpleStateWidget)
+		m_CharacterSimpleStateWidget->SetNameSetDelegate<AMonster>(this, &AMonster::SetPlayerNameWidget);
+}
+
+void AMonster::SetPlayerNameWidget()
+{
+	m_CharacterSimpleStateWidget->SetCharacterName(m_Info.Name);
 }
 
 void AMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -102,12 +127,20 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		m_Info.HP = 0.f;
 		m_MonsterAnim->ChangeAnim(EMonsterAnim::Death);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		// 죽었을 때 인공지능을 끄도록 한다.
+		AAIController* AI = Cast<AAIController>(GetController());
+
+		if (AI)
+			AI->BrainComponent->StopLogic(TEXT("Dead"));
+
 	}
 	else if (Dmg > 0.f)				// 죽을땐 Hit 못하도록
 		m_MonsterAnim->Hit();
 
-	return Dmg;
+	m_CharacterSimpleStateWidget->SetHPPercent((float)m_Info.HP / m_Info.HPMax);
 
+	return Dmg;
 }
 
 
