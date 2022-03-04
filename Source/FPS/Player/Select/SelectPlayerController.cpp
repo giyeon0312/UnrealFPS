@@ -106,6 +106,7 @@ void ASelectPlayerController::MouseLClick()
 		if (SelectWidget)
 		{
 			SelectWidget->StartEnable(true);
+			SelectWidget->SetInputNameVisible(true);
 		}
 	}
 
@@ -114,6 +115,7 @@ void ASelectPlayerController::MouseLClick()
 		if (SelectWidget)
 		{
 			SelectWidget->StartEnable(false);
+			SelectWidget->SetInputNameVisible(false);
 		}
 	}
 }

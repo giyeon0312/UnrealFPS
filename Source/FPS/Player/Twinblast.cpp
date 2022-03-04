@@ -54,7 +54,8 @@ ATwinblast::ATwinblast()
 		m_SkillMontageArr.Add(Skill1Asset.Object);
 
 	//기사로 지정
-	m_Info.Name = TEXT("Knight");
+	//m_Info.Name = TEXT("Knight");
+	m_Info.Job = EPlayerJob::Knight;
 }
 
 // Called when the game starts or when spawned

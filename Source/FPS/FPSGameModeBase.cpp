@@ -37,7 +37,7 @@ void AFPSGameModeBase::InitGame(const FString& MapName,	const FString& Options, 
 			DefaultPawnClass = LoadClass<APlayerCharacter>(GetWorld(), TEXT("Blueprint'/Game/Player/BPTwinblast.BPTwinblast_C'"));
 			break;
 		case EPlayerJob::Archer:
-			DefaultPawnClass = LoadClass<APlayerCharacter>(GetWorld(), TEXT("Blueprint'/Game/Player/BPTwinblast.BPTwinblast_C'"));
+			DefaultPawnClass = LoadClass<APlayerCharacter>(GetWorld(), TEXT("Blueprint'/Game/Player/BPBelica.BPBelica_C'"));
 			break;
 		case EPlayerJob::Magicion:
 			DefaultPawnClass = LoadClass<APlayerCharacter>(GetWorld(), TEXT("Blueprint'/Game/Player/BPTwinblast.BPTwinblast_C'"));

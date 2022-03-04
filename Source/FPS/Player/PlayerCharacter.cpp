@@ -61,12 +61,28 @@ void APlayerCharacter::BeginPlay()
 
 	if (GameInst)
 	{
-		const FPlayerTableInfo* TableInfo = GameInst->FindPlayerInfo(m_Info.Name);
+		FString	JobName;
+
+		switch (m_Info.Job)
+		{
+		case EPlayerJob::Knight:
+			JobName = TEXT("Knight");
+			break;
+		case EPlayerJob::Archer:
+			JobName = TEXT("Archer");
+			break;
+		case EPlayerJob::Magicion:
+			JobName = TEXT("Magicion");
+			break;
+		}
+
+		const FPlayerTableInfo* TableInfo = GameInst->FindPlayerInfo(JobName);
 
 		if (TableInfo)
 		{	
 			UE_LOG(LogTemp, Log, TEXT("Table Loaded"));
-			m_Info.Name = TableInfo->Name;
+			//m_Info.Name = TableInfo->Name;
+			m_Info.Name = GameInst->GetSelectName();
 			m_Info.Job = TableInfo->Job;
 			m_Info.Attack = TableInfo->Attack;
 			m_Info.Armor = TableInfo->Armor;

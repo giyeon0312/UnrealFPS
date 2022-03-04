@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "FPSGameInstance.h"
@@ -26,6 +26,9 @@ UFPSGameInstance::UFPSGameInstance()
 
 	if (QuestInfoTableAsset.Succeeded())
 		m_QuestInfoTable = QuestInfoTableAsset.Object;
+
+	m_SelectJob = EPlayerJob::Knight;
+	m_SelectName = TEXT("기사");
 }
 
 

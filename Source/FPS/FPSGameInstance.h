@@ -34,6 +34,16 @@ public:
 	UFPSGameInstance();
 
 public:
+	void SetSelectName(const FString& Name)
+	{
+		m_SelectName = Name;
+	}
+	
+	const FString GetSelectName()
+	{
+		return m_SelectName;
+	}
+
 	void SetSelectJob(EPlayerJob Job)
 	{
 		m_SelectJob = Job;
@@ -42,11 +52,6 @@ public:
 	EPlayerJob GetSelectJob()	const
 	{
 		return m_SelectJob;
-	}
-
-	void SetSelectName(const FString& Name)
-	{
-		m_SelectName = Name;
 	}
 
 public:
