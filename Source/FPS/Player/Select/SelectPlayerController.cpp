@@ -102,7 +102,7 @@ void ASelectPlayerController::MouseLClick()
 
 		if (GameInst)
 			GameInst->SetSelectJob(m_SelectCharacter->GetJob());
-
+		
 		if (SelectWidget)
 		{
 			SelectWidget->StartEnable(true);

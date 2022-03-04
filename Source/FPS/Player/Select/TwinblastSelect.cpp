@@ -7,7 +7,7 @@ ATwinblastSelect::ATwinblastSelect()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	m_Job = EPlayerJob::Archer;
+	m_Job = EPlayerJob::Knight;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/ParagonTwinblast/Characters/Heroes/TwinBlast/Skins/Tier2/ActionMovie/Meshes/TwinBlast_ActionHero.TwinBlast_ActionHero'"));
 
