@@ -34,6 +34,7 @@ public:
 public:
 	// 경로를 받아서 실시간 파티클 오브젝트 로드한다.
 	void SetParticle(const FString& Path);
+	void SetParticle(UParticleSystem *Particle);
 	// 사운드 재생 시스템
 	void SetSound(const FString& Path);
 

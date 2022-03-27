@@ -70,25 +70,30 @@ public:
 
 public:
 	UFUNCTION()
-		void AnimNotify_AttackEnd();
+	void AnimNotify_AttackEnd();
 
 	UFUNCTION()
-		void AnimNotify_AttackCombo();
+	void AnimNotify_AttackCombo();
 
 	UFUNCTION()
-		void AnimNotify_JumpEnd();
+	void AnimNotify_JumpEnd();
 
 	UFUNCTION()
-		void AnimNotify_FallEnd();
+	void AnimNotify_FallEnd();
 
 	UFUNCTION()
-		void AnimNotify_FallRecoveryEnd();
+	void AnimNotify_FallRecoveryEnd();
 
 	UFUNCTION()
-		void AnimNotify_Skill1Enable();
-
+	void AnimNotify_Skill1Enable();
 
 	UFUNCTION()
-		void AnimNotify_Attack();
+	void AnimNotify_Attack();
+
+	UFUNCTION()
+	void AnimNotify_FootLeft();
+
+	UFUNCTION()
+	void AnimNotify_FootRight();
 
 };

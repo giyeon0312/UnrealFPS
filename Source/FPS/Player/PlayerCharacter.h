@@ -100,4 +100,7 @@ public:
 	virtual void AttackEnd();
 	virtual void Skill1();
 	virtual void AttackEnable();
+
+public:
+	void Foot(bool Left);
 };

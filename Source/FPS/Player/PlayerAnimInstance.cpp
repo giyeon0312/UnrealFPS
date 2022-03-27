@@ -115,3 +115,20 @@ void UPlayerAnimInstance::AnimNotify_Attack()
 	if (Player)
 		Player->AttackEnable();
 }
+
+
+void UPlayerAnimInstance::AnimNotify_FootLeft()
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(TryGetPawnOwner());
+
+	if (Player)
+		Player->Foot(true);
+}
+
+void UPlayerAnimInstance::AnimNotify_FootRight()
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(TryGetPawnOwner());
+
+	if (Player)
+		Player->Foot(false);
+}

@@ -10,6 +10,7 @@
 #include "../UI/CharacterStateHUD.h"
 #include "../UI/InventoryWidget.h"
 #include "../UI/CharacterSimpleStateWidget.h"
+#include "../Material/PhysicalMaterial_ParticleSound.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -434,4 +435,38 @@ void APlayerCharacter::WeaponDetachKey()
 void APlayerCharacter::AttackEnable()
 {
 
+}
+
+
+void APlayerCharacter::Foot(bool Left)
+{
+	// 땅을 딛고있을 때만 체크해야하므로
+	if (!GetCharacterMovement()->IsMovingOnGround())		return;
+
+	FVector FootLoc = GetMesh()->GetSocketLocation(TEXT("Foot_R"));
+
+	if(Left)
+		FootLoc = GetMesh()->GetSocketLocation(TEXT("Foot_L"));
+
+	FCollisionQueryParams param(NAME_None, false, this);	// 복합충돌 안하고 나는 제외한다.
+	param.bReturnPhysicalMaterial = true;					// 충돌결과로 피지컬머티리얼을 받아오려면 true로 세팅해야한다.
+	FHitResult result;
+
+	bool Hit = GetWorld()->LineTraceSingleByChannel(result, FootLoc, FootLoc + FVector(0.f, 0.f, -100.f), ECollisionChannel::ECC_GameTraceChannel5, param); // 1m가량 체크한다.
+
+	if (Hit)
+	{
+		UPhysicalMaterial_ParticleSound* Phys
+			= Cast<UPhysicalMaterial_ParticleSound>(result.PhysMaterial);
+
+		if (Phys)
+		{
+			//Phys->PlaySound(result.ImpactPoint);
+			//Phys->CreateParitcle(result.ImpactPoint);
+			UGameplayStatics::PlaySoundAtLocation(this, Phys->GetSound(), result.ImpactPoint);
+		}
+		else
+		{
+		}
+	}
 }
