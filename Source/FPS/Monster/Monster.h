@@ -32,6 +32,24 @@ protected:
 
 	bool						m_AttackEnd;
 
+	bool						m_DissolveEnable;
+	float						m_Dissolve;			// Dissolve 정도
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	float m_DissolveMin;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	float m_DissolveMax;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	float m_DissolveTime;								// Dissolve 재생시간
+
+	float m_DissolveAccTime;
+	float m_DissolveRange;								// Dissolve 시간범위
+
+
+	TArray<UMaterialInstanceDynamic*>	m_DynamicMaterialArray; // 동적으로 만든 머티리얼 인스턴스
+
 protected:
 	// 몬스터 위 상태바
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -119,4 +137,7 @@ public:
 
 public:
 	virtual void NormalAttack();
+
+public:
+	void MonsterDeath();
 };

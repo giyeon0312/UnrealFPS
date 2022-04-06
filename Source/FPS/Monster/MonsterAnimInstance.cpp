@@ -49,5 +49,5 @@ void UMonsterAnimInstance::AnimNotify_DeathEnd()
 	AMonster* Monster = Cast<AMonster>(TryGetPawnOwner());
 
 	if (Monster)
-		Monster->Destroy();
+		Monster->MonsterDeath();
 }

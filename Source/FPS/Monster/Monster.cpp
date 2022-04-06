@@ -42,6 +42,16 @@ AMonster::AMonster()
 
 	m_PatrolType = EMonsterPatrolType::Loop;
 	m_PatrolDir = 1;						//Loop : 1, Inverse : -1
+
+	// Dissolve 관련 변수들
+	m_DissolveEnable = false;
+	m_Dissolve = 1.5;
+	m_DissolveTime = 3.f;								// Dissolve 재생시간
+	m_DissolveAccTime = 0.f;
+	m_DissolveMin = -1.5f;
+	m_DissolveMax = 1.5;
+	
+	m_DissolveRange = m_DissolveMax - m_DissolveMin;
 }
 
 void AMonster::ChangeAnim(EMonsterAnim Anim)
@@ -89,6 +99,15 @@ void AMonster::BeginPlay()
 
 	if (m_CharacterSimpleStateWidget)
 		m_CharacterSimpleStateWidget->SetNameSetDelegate<AMonster>(this, &AMonster::SetPlayerNameWidget);
+
+	// 머티리얼 정보들을 가져온다.
+	int32 MtrlSlotCount = GetMesh()->GetNumMaterials();
+
+	for (int32 i = 0; i < MtrlSlotCount; ++i)
+	{
+		UMaterialInstanceDynamic* Mtrl = GetMesh()->CreateDynamicMaterialInstance(i);
+		m_DynamicMaterialArray.Add(Mtrl);
+	}
 }
 
 void AMonster::SetPlayerNameWidget()
@@ -109,6 +128,19 @@ void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (m_DissolveEnable)
+	{
+		m_DissolveAccTime += DeltaTime;
+
+		m_Dissolve = m_DissolveMax - (m_DissolveAccTime / m_DissolveTime * m_DissolveRange);// 비율이 전체 구간에서 흐른 정도 구해
+
+		GetMesh()->SetScalarParameterValueOnMaterials(TEXT("Dissolve"), m_Dissolve);
+
+		if (m_DissolveAccTime >= m_DissolveTime)
+		{
+			Destroy();
+		}
+	}
 }
 
 
@@ -147,4 +179,14 @@ float AMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 void  AMonster::NormalAttack()
 {
 
+}
+
+
+void AMonster::MonsterDeath()
+{
+	// 죽는 모션이 종료되엇으므로 여기에서 Dissolve를 활성화 시킨다.
+	// 가지고 있는 모든 머티리얼들에 대해 변수의 이름을 바꾼다. 
+	GetMesh()->SetScalarParameterValueOnMaterials(TEXT("DissolveEnable"), 1.f);
+
+	m_DissolveEnable = true;
 }
