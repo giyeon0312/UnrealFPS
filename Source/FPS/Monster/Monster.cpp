@@ -52,6 +52,10 @@ AMonster::AMonster()
 	m_DissolveMax = 1.5;
 	
 	m_DissolveRange = m_DissolveMax - m_DissolveMin;
+
+	GetMesh()->bRenderCustomDepth = true;
+	GetMesh()->CustomDepthStencilWriteMask = ERendererStencilMask::ERSM_Default;
+	GetMesh()->SetCustomDepthStencilValue(2);
 }
 
 void AMonster::ChangeAnim(EMonsterAnim Anim)
@@ -140,6 +144,8 @@ void AMonster::Tick(float DeltaTime)
 		{
 			Destroy();
 		}
+
+		PrintViewport(2.f, FColor::Green, FString::Printf(TEXT("%f"), m_Dissolve));
 	}
 }
 

@@ -74,6 +74,11 @@ public:
 		m_AttackEnable = Enable;
 	}
 
+	FVector GetCameraPosition()	const
+	{
+		return m_Camera->GetComponentLocation();
+	}
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);

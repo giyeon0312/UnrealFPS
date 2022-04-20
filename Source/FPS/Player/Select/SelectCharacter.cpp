@@ -40,9 +40,8 @@ void ASelectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void ASelectCharacter::EnableOutLine(bool Enable)
 {
-	//if (Enable)
-	//	GetMesh()->SetCustomDepthStencilValue(1);
-
-	//else
-	//	GetMesh()->SetCustomDepthStencilValue(255);
+	if (Enable)
+		GetMesh()->SetCustomDepthStencilValue(1);
+	else
+		GetMesh()->SetCustomDepthStencilValue(255);
 }

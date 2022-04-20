@@ -17,6 +17,9 @@ class FPS_API AMainPlayerController : public APlayerController
 public:
 	AMainPlayerController();
 
+private:
+	TArray<class AEnvironmentActor*>	m_CameraCollisionEnvironmentActor;
+
 protected:
 	virtual void BeginPlay() override;
 
