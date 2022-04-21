@@ -7,6 +7,7 @@
 
 AMainPlayerController::AMainPlayerController()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	bShowMouseCursor = true;
 }
 
