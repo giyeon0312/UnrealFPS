@@ -12,6 +12,7 @@
 #include "../UI/CharacterSimpleStateWidget.h"
 #include "../Material/PhysicalMaterial_ParticleSound.h"
 #include "../Effect/GhostTrail.h"
+#include "../Effect/HitCamera.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -175,6 +176,9 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 
 	Dmg = Super::TakeDamage(Dmg, DamageEvent, EventInstigator, DamageCauser); //Dmg값을 넣어서 0이 나오면 무적이고 아님 원본값이 그대로 나오면 값을 빼줄것이다.
 
+	if (Dmg <= 0.f)
+		return 0.f;
+
 	if (Dmg > 0.f)
 	{
 		//m_AnimInstance->Hit();
@@ -195,6 +199,8 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 		GameMode->GetMainWidget()->GetCharacterStateHUD()->SetHPPercent((float)m_Info.HP / m_Info.HPMax);
 		m_CharacterSimpleStateWidget->SetHPPercent((float)m_Info.HP / m_Info.HPMax);
 	}
+
+	GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(UHitCamera::StaticClass());
 
 	return Dmg;
 }
