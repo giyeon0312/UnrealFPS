@@ -59,6 +59,13 @@ protected:
 
 	class AWeapon* m_Weapon;
 
+	// 고스트트레일 효과위한 컴포넌트들
+	USkeletalMesh* m_MeshAsset;
+
+	bool		m_Ghost;
+	float		m_GhostTime;
+	float		m_GhostTimeMax;
+
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivate = true));
 	FPlayerInfo m_Info;
 

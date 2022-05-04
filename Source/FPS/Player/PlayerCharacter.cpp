@@ -11,6 +11,7 @@
 #include "../UI/InventoryWidget.h"
 #include "../UI/CharacterSimpleStateWidget.h"
 #include "../Material/PhysicalMaterial_ParticleSound.h"
+#include "../Effect/GhostTrail.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -61,6 +62,11 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetReceivesDecals(false);
 
 	m_Weapon = nullptr;
+
+	// 고스트트레일 효과
+	m_Ghost = true;
+	m_GhostTime = 0.f;
+	m_GhostTimeMax = 1.f;
 }
 
 // Called when the game starts or when spawned
@@ -139,6 +145,26 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (m_Ghost)
+	{
+		m_GhostTime += DeltaTime;
+
+		if (m_GhostTime >= m_GhostTimeMax)
+		{
+			m_GhostTime -= m_GhostTimeMax;
+
+			FActorSpawnParameters	param;
+			param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+			AGhostTrail* Ghost = GetWorld()->SpawnActor<AGhostTrail>(AGhostTrail::StaticClass(),
+				GetMesh()->GetComponentLocation(),
+				GetMesh()->GetComponentRotation(),
+				param);
+
+			Ghost->SetMesh(m_MeshAsset);
+			Ghost->CopyAnimation(GetMesh());
+		}
+	}
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
