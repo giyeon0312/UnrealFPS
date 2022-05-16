@@ -69,6 +69,11 @@ protected:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivate = true));
 	FPlayerInfo m_Info;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivate = true));
+	FString m_HitParticleName;
+
+	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivate = true));
+	FString m_HitSoundName;
 
 public:
 	const FPlayerInfo* GetInfo() const

@@ -150,9 +150,10 @@ void ATwinblast::AttackEnable()
 
 			AEffect* Effect = GetWorld()->SpawnActor<AEffect>(AEffect::StaticClass(), result.ImpactPoint, result.ImpactNormal.Rotation(), param1);
 
-			Effect->SetParticle(TEXT("ParticleSystem'/Game/AdvancedMagicFX12/particles/P_ky_hit_dark.P_ky_hit_dark'"));
-			Effect->SetSound(TEXT("SoundWave'/Game/Sound/cardboard-step-1.cardboard-step-1'"));
-
+			//Effect->SetParticle(TEXT("ParticleSystem'/Game/AdvancedMagicFX12/particles/P_ky_hit_dark.P_ky_hit_dark'"));
+			//Effect->SetSound(TEXT("SoundWave'/Game/Sound/cardboard-step-1.cardboard-step-1'"));
+			Effect->SetParticleAsync(m_HitParticleName);
+			Effect->SetSoundAsync(m_HitSoundName);
 
 			//데미지를 전달한다.
 			FDamageEvent DmgEvent; //Actor클래스에 가상함수에 TakeDamage가 있다.

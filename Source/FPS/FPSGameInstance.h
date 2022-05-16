@@ -30,8 +30,13 @@ private:
 	EPlayerJob	m_SelectJob;
 	FString		m_SelectName;
 
+	class UAssetPathManagement* m_AssetManagement;
+
 public:
 	UFPSGameInstance();
+
+public:
+	virtual void Init();
 
 public:
 	void SetSelectName(const FString& Name)
@@ -52,6 +57,12 @@ public:
 	EPlayerJob GetSelectJob()	const
 	{
 		return m_SelectJob;
+	}
+
+	// 비동기로 로드하는 에셋의 경로를 얻기 위해 전체 매니지먼트를 리턴한다.
+	class UAssetPathManagement* GetAssetPathManagement()
+	{
+		return m_AssetManagement;
 	}
 
 public:

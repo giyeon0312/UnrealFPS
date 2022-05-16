@@ -10,8 +10,10 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/WidgetComponent.h"
+#include "Engine/AssetManager.h"
 #include "UObject/NoExportTypes.h"
 #include "GameInfo.generated.h"
+
 
 // µð¹ö±ë¿ë ºäÆ÷Æ® Ãâ·Â 
 void PrintViewport(float Time, const FColor& Color, const FString& Text);
@@ -415,6 +417,18 @@ enum class EListSelect : uint8
 	None,
 	MouseOn,
 	Select
+};
+
+USTRUCT()
+struct FAssetPathInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	FString		Name;
+
+	UPROPERTY(EditAnywhere)
+	FSoftObjectPath		Path;
 };
 
 UCLASS()

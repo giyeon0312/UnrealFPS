@@ -1,9 +1,9 @@
 #include "Effect.h"
+#include "../FPSGameInstance.h"
+#include "../AssetPathManagement.h"
 
-// Sets default values
 AEffect::AEffect()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	m_Particle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
@@ -60,7 +60,70 @@ void AEffect::SetSound(const FString& Path)
 	}
 }
 
+
+#pragma region LoadEffectAsync
+
+void AEffect::SetParticleAsync(const FString& Name)
+{
+	UFPSGameInstance* GameInst = Cast<UFPSGameInstance>(GetWorld()->GetGameInstance());
+	UAssetPathManagement* PathManager = GameInst->GetAssetPathManagement();
+
+	const FSoftObjectPath* Path = PathManager->FindParticlePath(Name);
+
+	if (!Path)	return;
+
+	m_ParticleAssetPath = *Path;
+
+	FStreamableManager& streamMgr = UAssetManager::GetStreamableManager();
+
+	m_AsyncParticleLoadHandle = streamMgr.RequestAsyncLoad(m_ParticleAssetPath,
+		FStreamableDelegate::CreateUObject(this, &AEffect::LoadParticleAsyncComplete));
+}
+
+void AEffect::LoadParticleAsyncComplete()
+{
+	m_AsyncParticleLoadHandle->ReleaseHandle();
+	TAssetPtr<UParticleSystem>	NewParticle(m_ParticleAssetPath);
+
+	if (NewParticle)
+	{
+		m_Particle->SetTemplate(NewParticle.Get());
+		m_Particle->OnSystemFinished.AddDynamic(this, &AEffect::ParticleFinish);
+	}
+}
+
+void AEffect::SetSoundAsync(const FString& Name)
+{
+	UFPSGameInstance* GameInst = Cast<UFPSGameInstance>(GetWorld()->GetGameInstance());
+	UAssetPathManagement* PathManager = GameInst->GetAssetPathManagement();
+
+	const FSoftObjectPath* Path = PathManager->FindSoundPath(Name);
+
+	if (!Path)	return;
+
+	m_SoundAssetPath = *Path;	// 경로를 가져온다.
+
+	FStreamableManager& streamMgr = UAssetManager::GetStreamableManager();
+
+	m_AsyncSoundLoadHandle = streamMgr.RequestAsyncLoad(m_SoundAssetPath,
+		FStreamableDelegate::CreateUObject(this, &AEffect::LoadSoundAsyncComplete));
+}
+
+void AEffect::LoadSoundAsyncComplete()
+{
+	m_AsyncSoundLoadHandle->ReleaseHandle();
+
+	TAssetPtr<USoundBase>	NewSound(m_SoundAssetPath);
+
+	if (NewSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, NewSound.Get(), GetActorLocation());
+	}
+}
+
 void AEffect::ParticleFinish(UParticleSystemComponent* Particle)
 {
 	Destroy();
 }
+
+#pragma endregion // LoadEffectAsync

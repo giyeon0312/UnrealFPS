@@ -2,6 +2,7 @@
 
 
 #include "FPSGameInstance.h"
+#include "AssetPathManagement.h"
 
 
 UFPSGameInstance::UFPSGameInstance()
@@ -31,6 +32,15 @@ UFPSGameInstance::UFPSGameInstance()
 	m_SelectName = TEXT("기사");
 }
 
+void UFPSGameInstance::Init()
+{
+	Super::Init();
+
+	LOG(TEXT("Init Game"));
+
+	m_AssetManagement = UAssetPathManagement::StaticClass()->GetDefaultObject<UAssetPathManagement>();
+	m_AssetManagement->ConvertPath();
+}
 
 const FMonsterTableInfo* UFPSGameInstance::FindMonsterInfo(const FString& Name)
 {

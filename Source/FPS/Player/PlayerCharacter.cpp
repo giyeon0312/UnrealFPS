@@ -68,6 +68,9 @@ APlayerCharacter::APlayerCharacter()
 	m_Ghost = true;
 	m_GhostTime = 0.f;
 	m_GhostTimeMax = 1.f;
+
+	m_HitParticleName = TEXT("HitFireParticle");
+	m_HitSoundName = TEXT("DefaultHitSound");
 }
 
 // Called when the game starts or when spawned

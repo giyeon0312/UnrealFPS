@@ -20,8 +20,16 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivateAccess = true)) // 파티클시스템 컴포넌트
-		UParticleSystemComponent* m_Particle;
+	UParticleSystemComponent* m_Particle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	FSoftObjectPath		m_ParticleAssetPath;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	FSoftObjectPath		m_SoundAssetPath;
+
+	TSharedPtr<FStreamableHandle>	m_AsyncParticleLoadHandle;
+	TSharedPtr<FStreamableHandle>	m_AsyncSoundLoadHandle;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +45,11 @@ public:
 	void SetParticle(UParticleSystem *Particle);
 	// 사운드 재생 시스템
 	void SetSound(const FString& Path);
+
+	void SetParticleAsync(const FString& Name);
+	void LoadParticleAsyncComplete();
+	void SetSoundAsync(const FString& Name);
+	void LoadSoundAsyncComplete();
 
 	UFUNCTION()
 		void ParticleFinish(UParticleSystemComponent* Particle);

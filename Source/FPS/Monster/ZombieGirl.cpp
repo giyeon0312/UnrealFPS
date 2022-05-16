@@ -72,9 +72,12 @@ void  AZombieGirl::NormalAttack()
 	
 			AEffect* Effect = GetWorld()->SpawnActor<AEffect>(AEffect::StaticClass(), result.ImpactPoint, result.ImpactNormal.Rotation(), param1);
 	
-			Effect->SetParticle(TEXT("ParticleSystem'/Game/AdvancedMagicFX12/particles/P_ky_hit_dark.P_ky_hit_dark'"));
-			Effect->SetSound(TEXT("SoundWave'/Game/Sound/cardboard-step-1.cardboard-step-1'"));
+			//Effect->SetParticle(TEXT("ParticleSystem'/Game/AdvancedMagicFX12/particles/P_ky_hit_dark.P_ky_hit_dark'"));
+			//Effect->SetSound(TEXT("SoundWave'/Game/Sound/cardboard-step-1.cardboard-step-1'"));
 	
+			Effect->SetParticleAsync(TEXT("DefaultHitParticle"));
+			Effect->SetSoundAsync(TEXT("DefaultHitSound"));
+
 			//데미지를 전달한다.
 			FDamageEvent DmgEvent; //Actor클래스에 가상함수에 TakeDamage가 있다.
 			result.GetActor()->TakeDamage((float)m_Info.Attack, DmgEvent, GetController(), this); //플레이어의 공격력.데미지이벤트(데미지 종류),주체가되는 컨트롤러(플레이어의),누가 데미지를 가하는지 
