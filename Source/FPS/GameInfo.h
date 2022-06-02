@@ -11,6 +11,9 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/AssetManager.h"
+#include "LevelSequence.h"
+#include "LevelSequencePlayer.h"
+
 #include "UObject/NoExportTypes.h"
 #include "GameInfo.generated.h"
 
