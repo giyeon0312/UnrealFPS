@@ -38,6 +38,8 @@ protected:
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	USceneCaptureComponent2D* m_FaceCapture;*/
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UDecalComponent* m_MouseDecal;
 
 	// 몽타주를 배열로 가져온다.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -53,6 +55,7 @@ protected:
 	bool m_AttackEnable;
 
 	class UPlayerAnimInstance* m_AnimInstance;
+
 	bool m_MoveKey;		// 아예 안움직이는지 체크
 
 	bool m_Death;		// 죽었는지 체크
@@ -65,6 +68,10 @@ protected:
 	bool		m_Ghost;
 	float		m_GhostTime;
 	float		m_GhostTimeMax;
+	bool		m_ClickMove;
+	bool		m_MoveActor;
+	FVector		m_MoveTarget;
+	AActor*		m_MoveTargetActor;
 
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, meta = (AllowPrivate = true));
 	FPlayerInfo m_Info;
@@ -91,6 +98,28 @@ public:
 		return m_Camera->GetComponentLocation();
 	}
 
+	UDecalComponent* GetCursorDecal()	const
+	{
+		return m_MouseDecal;
+	}
+
+	void SetClickMove(bool Move)
+	{
+		m_ClickMove = Move;
+	}
+
+	void SetMoveTarget(const FVector& Target)
+	{
+		m_MoveTarget = Target;
+		m_MoveActor = false;
+	}
+
+	void SetMoveTargetActor(AActor* Target)
+	{
+		m_MoveTargetActor = Target;
+		m_MoveActor = true;
+	}
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
@@ -111,6 +140,7 @@ public:
 	void SetWeapon(UStaticMesh* WeaponMesh);
 	void AddHP(int32 HP);
 	void AddMP(int32 MP);
+	void MoveTarget();
 
 public:
 	virtual void NormalAttack();

@@ -325,6 +325,22 @@ enum class EMonsterPatrolType : uint8
 };
 
 UENUM(BlueprintType)
+enum class EMouseState : uint8
+{
+	Default,
+	Aiming,
+	NPC,
+	Looting
+};
+
+enum class EListSelect : uint8
+{
+	None,
+	MouseOn,
+	Select
+};
+
+UENUM(BlueprintType)
 enum class EQuestType : uint8
 {
 	Collection, 	// ¼öÁýÇü
@@ -413,13 +429,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	TArray<FQuestCompensation>	CompensationArray;
-};
-
-enum class EListSelect : uint8
-{
-	None,
-	MouseOn,
-	Select
 };
 
 USTRUCT()

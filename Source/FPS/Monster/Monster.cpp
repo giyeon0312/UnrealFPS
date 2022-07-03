@@ -16,6 +16,7 @@ AMonster::AMonster()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Monster"));
 	GetCapsuleComponent()->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No; //플레이어가 밟고 올라설 수 없도록
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->bReceivesDecals = false;
 
 	// 몬스터 위 상태 바
 	m_SimpleStateWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("SimpleState"));

@@ -26,4 +26,6 @@ protected:
 public:
 	virtual void PlayerTick(float DeltaTime) override;
 
+private:
+	void Picking();
 };

@@ -14,11 +14,13 @@ AFPSGameModeBase::AFPSGameModeBase()
 	//	DefaultPawnClass = PlayerAsset.Class;
 
 	static ConstructorHelpers::FClassFinder<UMainWidget>	MainWidgetClassAsset(TEXT("WidgetBlueprint'/Game/UI/UI_MainWidget.UI_MainWidget_C'"));
-	
 	if (MainWidgetClassAsset.Succeeded())
 		m_MainWidgetClass = MainWidgetClassAsset.Class;
-
 	PlayerControllerClass = AMainPlayerController::StaticClass(); //UClass¡§∫∏
+
+	static ConstructorHelpers::FClassFinder<UMouseWidget>	MouseWidgetClassAsset(TEXT("WidgetBlueprint'/Game/UI/UI_Mouse.UI_Mouse_C'"));
+	if (MouseWidgetClassAsset.Succeeded())
+		m_MouseWidgetClass = MouseWidgetClassAsset.Class;
 }
 
 void AFPSGameModeBase::InitGame(const FString& MapName,	const FString& Options, FString& ErrorMessage)
@@ -56,5 +58,13 @@ void AFPSGameModeBase::BeginPlay()
 
 		if (m_MainWidget)
 			m_MainWidget->AddToViewport();
+	}
+
+	if (m_MouseWidgetClass)
+	{
+		m_MouseWidget = CreateWidget<UMouseWidget>(GetWorld(), m_MouseWidgetClass);
+
+		if (m_MouseWidget)
+			GetWorld()->GetFirstPlayerController()->SetMouseCursorWidget(EMouseCursor::Default, m_MouseWidget);
 	}
 }

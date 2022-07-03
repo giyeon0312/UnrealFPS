@@ -4,6 +4,8 @@
 #include "MainPlayerController.h"
 #include "../Environment/EnvironmentActor.h"
 #include "PlayerCharacter.h"
+#include "../Monster/Monster.h"
+#include "../FPSGameModeBase.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -80,4 +82,74 @@ void AMainPlayerController::BeginPlay()
 void AMainPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
+
+	Picking();
+}
+
+void AMainPlayerController::Picking()
+{
+	FHitResult	result;
+
+	bool Collision = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
+
+	AFPSGameModeBase* GameMode = Cast<AFPSGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (Collision)
+	{
+		if (Cast<AMonster>(result.GetActor()))
+		{
+			GameMode->GetMouseWidget()->ChangeMouse(EMouseState::Aiming);
+
+			//CurrentMouseCursor = EMouseCursor::Hand;
+			APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(GetPawn());
+
+			if (PlayerActor)
+			{
+				PlayerActor->SetClickMove(true);
+				PlayerActor->SetMoveTargetActor(result.GetActor());
+				PlayerActor->GetCursorDecal()->SetHiddenInGame(true);
+			}
+		}
+		else if (result.GetActor()->ActorHasTag(TEXT("LandScape")))
+		{
+			GameMode->GetMouseWidget()->ChangeMouse(EMouseState::Default);
+
+			APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(GetPawn());
+
+			if (PlayerActor)
+			{
+				PlayerActor->SetClickMove(true);
+				PlayerActor->SetMoveTarget(result.ImpactPoint);
+				PlayerActor->GetCursorDecal()->SetHiddenInGame(false);
+				PlayerActor->GetCursorDecal()->SetWorldLocation(result.ImpactPoint);
+				PlayerActor->GetCursorDecal()->SetWorldRotation(result.ImpactNormal.ToOrientationRotator());
+			}
+		}
+		else
+		{
+			GameMode->GetMouseWidget()->ChangeMouse(EMouseState::Default);
+			APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(GetPawn());
+
+			if (PlayerActor)
+			{
+				PlayerActor->SetClickMove(false);
+				PlayerActor->GetCursorDecal()->SetHiddenInGame(true);
+			}
+			//CurrentMouseCursor = EMouseCursor::Default;
+		}
+	}
+	// 클릭이 안됐을 때
+	else
+	{
+		GameMode->GetMouseWidget()->ChangeMouse(EMouseState::Default);
+		APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(GetPawn());
+
+		if (PlayerActor)
+		{
+			//PlayerActor->SetClickMove(false);
+			PlayerActor->GetCursorDecal()->SetHiddenInGame(true);
+		}
+
+		//CurrentMouseCursor = EMouseCursor::Default;
+	}
 }

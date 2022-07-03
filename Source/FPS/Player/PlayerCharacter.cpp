@@ -26,16 +26,27 @@ APlayerCharacter::APlayerCharacter()
 	m_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	m_Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Arm"));
 	m_SimpleStateWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("SimpleState"));
+	m_MouseDecal = CreateDefaultSubobject<UDecalComponent>(TEXT("MouseDecal"));
+
+
+	m_MouseDecal->SetRelativeRotation(FRotator(-90.f, 0.f, 0.f));
+	m_MouseDecal->SetRelativeScale3D(FVector(0.2f, 0.2f, 1.f));
 
 	// (씬컴포넌트 이므로)부모컴포넌트를 지정한다.
 	m_Arm->SetupAttachment(GetCapsuleComponent());
 	m_Camera->SetupAttachment(m_Arm);
 
-	// 캐릭터 위 상태 바 
 	m_SimpleStateWidget->SetupAttachment(GetMesh());
 
-	static ConstructorHelpers::FClassFinder<UUserWidget>	SimpleCharacterState(TEXT("WidgetBlueprint'/Game/UI/UI_CharacterSimpleState.UI_CharacterSimpleState_C'"));
+	GetMesh()->bReceivesDecals = false;
 
+	// 커서 에셋
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> CursorAsset(TEXT("MaterialInstanceConstant'/Game/Material/MTCursor_LandScape.MTCursor_LandScape'"));
+	if (CursorAsset.Succeeded())
+		m_MouseDecal->SetDecalMaterial(CursorAsset.Object);
+
+	// 캐릭터 위 상태 바 
+	static ConstructorHelpers::FClassFinder<UUserWidget>	SimpleCharacterState(TEXT("WidgetBlueprint'/Game/UI/UI_CharacterSimpleState.UI_CharacterSimpleState_C'"));
 	if (SimpleCharacterState.Succeeded())
 		m_SimpleStateWidget->SetWidgetClass(SimpleCharacterState.Class);
 
@@ -71,6 +82,10 @@ APlayerCharacter::APlayerCharacter()
 
 	m_HitParticleName = TEXT("HitFireParticle");
 	m_HitSoundName = TEXT("DefaultHitSound");
+
+	m_ClickMove = false;
+	m_MoveTargetActor = nullptr;
+	m_MoveActor = false;
 }
 
 // Called when the game starts or when spawned
@@ -228,6 +243,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("WeaponAttach"), EInputEvent::IE_Pressed, this, &APlayerCharacter::WeaponAttachKey);
 	PlayerInputComponent->BindAction(TEXT("WeaponDetach"), EInputEvent::IE_Pressed, this, &APlayerCharacter::WeaponDetachKey);
+
+
+	PlayerInputComponent->BindAction(TEXT("MouseRButton"), EInputEvent::IE_Pressed, this, &APlayerCharacter::MoveTarget);
 }
 
 
@@ -464,6 +482,17 @@ void APlayerCharacter::WeaponDetachKey()
 		PrintViewport(1.f, FColor::Red, TEXT("DetachKeyPressed"));
 		m_Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); // 무기의 위치 world 정보를 유지하면서 무기를 때겠다.
 		//m_Weapon->SimulatePhysics(true); // 무기를 떼기 위해 물리를 넣었다.
+	}
+}
+
+void APlayerCharacter::MoveTarget()
+{
+	if (m_ClickMove)
+	{
+		if (m_MoveActor)
+			UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), m_MoveTargetActor);
+		else
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), m_MoveTarget);
 	}
 }
 
